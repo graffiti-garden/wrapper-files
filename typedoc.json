@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["dist/plugin.d.ts"],
+  "tsconfig": "tsconfig.typedoc.json",
+  "cname": "graffiti.garden",
+  "titleLink": "/functions/GraffitiPersonalData.html",
+  "searchInDocuments": true,
+  "searchInComments": true,
+  "plugin": ["typedoc-plugin-vue"],
+  "highlightLanguages": ["bash", "html", "typescript", "vue"]
+}
