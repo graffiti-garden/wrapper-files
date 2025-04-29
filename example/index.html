@@ -11,8 +11,8 @@
                     "vue": "https://cdn.jsdelivr.net/npm/vue/dist/vue.esm-browser.prod.js",
                     "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7/dist/browser/plugin.mjs",
                     "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local/dist/browser/index.js",
-                    "@graffiti-garden/wrapper-files": "../dist/browser/index.js",
-                    "@graffiti-garden/wrapper-files/vue": "../dist/vue/index.mjs"
+                    "@graffiti-garden/wrapper-files": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-files@0.0.1/dist/browser/index.js",
+                    "@graffiti-garden/wrapper-files/vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-files@0.0.1/dist/vue/index.mjs"
                 }
             }
         </script>
@@ -137,7 +137,7 @@
                 data() {
                     return {
                         fileToUpload: undefined,
-                        fileUrl: undefined,
+                        fileUrl: "",
                         graffitiFileSchema,
                     };
                 },

@@ -1,6 +1,6 @@
 {
-  "name": "@graffiti-garden/wrapper-vue-files",
-  "version": "0.0.2",
+  "name": "@graffiti-garden/wrapper-files",
+  "version": "0.0.1",
   "description": "Upload and download base64-encoded files to/from Graffiti",
   "types": "./dist/types/index.d.ts",
   "module": "./dist/esm/index.js",
@@ -19,11 +19,9 @@
     },
     "./vue": {
       "import": {
-        "types": "./dist/vue/index.d.ts",
         "default": "./dist/vue/index.mjs"
       },
       "require": {
-        "types": "./dist/vue/index.d.ts",
         "default": "./dist/vue/index.js"
       }
     }
@@ -46,10 +44,10 @@
   "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/graffiti-garden/wrapper-vue-files.git"
+    "url": "git+https://github.com/graffiti-garden/wrapper-files.git"
   },
   "bugs": {
-    "url": "https://github.com/graffiti-garden/wrapper-vue-files/issues"
+    "url": "https://github.com/graffiti-garden/wrapper-files/issues"
   },
   "dependencies": {
     "@graffiti-garden/api": "^0.6.3",
