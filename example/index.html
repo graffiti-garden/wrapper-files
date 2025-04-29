@@ -4,13 +4,15 @@
         <meta charset="utf-8" />
         <title>Graffiti File Upload</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue-files@0.0.1/dist/plugin.mjs" -->
         <script type="importmap">
             {
                 "imports": {
                     "vue": "https://cdn.jsdelivr.net/npm/vue/dist/vue.esm-browser.prod.js",
                     "@graffiti-garden/wrapper-vue": "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue@0.7/dist/browser/plugin.mjs",
                     "@graffiti-garden/implementation-local": "https://cdn.jsdelivr.net/npm/@graffiti-garden/implementation-local/dist/browser/index.js",
-                    "@graffiti-garden/wrapper-vue-files": "../dist/plugin.mjs"
+                    "@graffiti-garden/wrapper-files": "../dist/browser/index.js",
+                    "@graffiti-garden/wrapper-files/vue": "../dist/vue/index.mjs"
                 }
             }
         </script>
@@ -27,6 +29,11 @@
     <body>
         <div id="app">
             <h1>Graffiti File</h1>
+            <p>
+                <a download href
+                    >Download the source code and make it your own!</a
+                >
+            </p>
 
             <button v-if="!$graffitiSession.value" @click="$graffiti.login()">
                 Login
@@ -61,44 +68,53 @@
                         placeholder="graffiti:..."
                         v-model="fileUrl"
                     />
-                    <graffiti-get-file
+                    <graffiti-get
                         :url="fileUrl"
-                        v-slot="{ object, file, fileDataUrl }"
+                        :schema="graffitiFileSchema"
+                        v-slot="{ object }"
                     >
-                        <p v-if="file === undefined">Loading...</p>
-                        <p v-else-if="file === null">File not found.</p>
-                        <template v-else>
-                            <p>
-                                <a :href="fileDataUrl" download>
-                                    Download {{ file.name }}
-                                </a>
-                            </p>
+                        <graffiti-object-to-file
+                            :object="object"
+                            v-slot="{ file, fileDataUrl }"
+                        >
+                            <p v-if="file === undefined">Loading...</p>
+                            <p v-else-if="file === null">File not found.</p>
+                            <template v-else>
+                                <p>
+                                    <a :href="fileDataUrl" download>
+                                        Download {{ file.name }}
+                                    </a>
+                                </p>
 
-                            <p
-                                v-if="object.actor === $graffitiSession.value.actor"
-                            >
-                                <button
-                                    @click="$graffiti.delete(object, $graffitiSession.value)"
+                                <p
+                                    v-if="object.actor === $graffitiSession.value.actor"
                                 >
-                                    Delete {{ file.name }}
-                                </button>
-                            </p>
+                                    <button
+                                        @click="$graffiti.delete(object, $graffitiSession.value)"
+                                    >
+                                        Delete {{ file.name }}
+                                    </button>
+                                </p>
 
-                            <p v-if="file.type.startsWith('image/')">
-                                <img :src="fileDataUrl" alt="Uploaded Image" />
-                            </p>
-                            <p v-else-if="file.type.startsWith('video/')">
-                                <video controls style="max-width: 100%">
-                                    <source :src="fileDataUrl" />
-                                </video>
-                            </p>
-                            <p v-else-if="file.type.startsWith('audio/')">
-                                <audio controls>
-                                    <source :src="fileDataUrl" />
-                                </audio>
-                            </p>
-                        </template>
-                    </graffiti-get-file>
+                                <p v-if="file.type.startsWith('image/')">
+                                    <img
+                                        :src="fileDataUrl"
+                                        alt="Uploaded Image"
+                                    />
+                                </p>
+                                <p v-else-if="file.type.startsWith('video/')">
+                                    <video controls style="max-width: 100%">
+                                        <source :src="fileDataUrl" />
+                                    </video>
+                                </p>
+                                <p v-else-if="file.type.startsWith('audio/')">
+                                    <audio controls>
+                                        <source :src="fileDataUrl" />
+                                    </audio>
+                                </p>
+                            </template>
+                        </graffiti-object-to-file>
+                    </graffiti-get>
                 </article>
 
                 <button @click="$graffiti.logout($graffitiSession.value)">
@@ -111,13 +127,18 @@
             import { createApp } from "vue";
             import { GraffitiPlugin } from "@graffiti-garden/wrapper-vue";
             import { GraffitiLocal } from "@graffiti-garden/implementation-local";
-            import { GraffitiFilePlugin } from "@graffiti-garden/wrapper-vue-files";
+            import {
+                fileToGraffitiObject,
+                graffitiFileSchema,
+            } from "@graffiti-garden/wrapper-files";
+            import { GraffitiObjectToFile } from "@graffiti-garden/wrapper-files/vue";
 
             createApp({
                 data() {
                     return {
                         fileToUpload: undefined,
                         fileUrl: undefined,
+                        graffitiFileSchema,
                     };
                 },
                 methods: {
@@ -129,22 +150,25 @@
                     async uploadFile(session) {
                         if (!this.fileToUpload) return;
                         try {
-                            this.fileUrl = await this.$graffitiUploadFile(
+                            const object = await fileToGraffitiObject(
                                 this.fileToUpload,
+                            );
+                            const { url } = await this.$graffiti.put(
+                                object,
                                 session,
                             );
+                            this.fileUrl = url;
                         } catch (e) {
-                            alert(e);
-                            return;
+                            return alert(e);
                         }
                         alert("Uploaded!");
                     },
                 },
+                components: { GraffitiObjectToFile },
             })
                 .use(GraffitiPlugin, {
                     graffiti: new GraffitiLocal(),
                 })
-                .use(GraffitiFilePlugin)
                 .mount("#app");
         </script>
     </body>

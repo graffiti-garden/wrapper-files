@@ -1,20 +1,30 @@
 {
   "name": "@graffiti-garden/wrapper-vue-files",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Upload and download base64-encoded files to/from Graffiti",
-  "types": "./dist/node/plugin.d.ts",
-  "module": "./dist/node/plugin.mjs",
-  "main": "./dist/node/plugin.js",
-  "browser": "./dist/browser/plugin.mjs",
+  "types": "./dist/types/index.d.ts",
+  "module": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.js",
+  "browser": "./dist/browser/index.js",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/node/plugin.d.ts",
-        "default": "./dist/node/plugin.mjs"
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
       },
       "require": {
-        "types": "./dist/node/plugin.d.ts",
-        "default": "./dist/node/plugin.js"
+        "types": "./dist/types/plugin.d.ts",
+        "default": "./dist/cjs/plugin.js"
+      }
+    },
+    "./vue": {
+      "import": {
+        "types": "./dist/vue/index.d.ts",
+        "default": "./dist/vue/index.mjs"
+      },
+      "require": {
+        "types": "./dist/vue/index.d.ts",
+        "default": "./dist/vue/index.js"
       }
     }
   },
@@ -25,8 +35,10 @@
     "README.md"
   ],
   "scripts": {
-    "build:js": "vite build",
-    "build:docs": "npm run build:js && typedoc --options typedoc.json",
+    "build:types": "tsc --declaration --emitDeclarationOnly",
+    "build:js": "tsx esbuild.config.mts",
+    "build:vue": "vite build",
+    "build:docs": "npm run build:types && npm run build:js && npm run build:vue && typedoc --options typedoc.json",
     "build": "rm -rf dist && npm run build:docs && cp -r example docs",
     "prepublishOnly": "npm install && npm run build"
   },
@@ -47,6 +59,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/typescript-plugin": "^2.2.0",
+    "tsx": "^4.19.3",
     "typedoc": "^0.27.6",
     "typedoc-plugin-vue": "^1.4.0",
     "vite": "^6.1.0",
@@ -54,7 +67,7 @@
     "vite-plugin-node-polyfills": "^0.23.0"
   },
   "peerDependencies": {
-    "vue": "^3.5.13",
-    "@graffiti-garden/wrapper-vue": "^0.7.2"
+    "@graffiti-garden/wrapper-vue": "^0.7.2",
+    "vue": "^3.5.13"
   }
 }

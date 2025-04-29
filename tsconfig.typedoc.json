@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["dist/plugin.d.ts"]
+  "include": ["dist/types/index.d.ts"]
 }

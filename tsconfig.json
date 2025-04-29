@@ -10,7 +10,9 @@
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
-    "plugins": [{ "name": "@vue/typescript-plugin" }]
+    "plugins": [{ "name": "@vue/typescript-plugin" }],
+    "declarationDir": "dist/types"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/vue"]
 }
