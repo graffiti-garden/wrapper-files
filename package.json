@@ -1,6 +1,6 @@
 {
   "name": "@graffiti-garden/wrapper-files",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Upload and download base64-encoded files to/from Graffiti",
   "types": "./dist/types/index.d.ts",
   "module": "./dist/esm/index.js",

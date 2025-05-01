@@ -4,7 +4,6 @@
         <meta charset="utf-8" />
         <title>Graffiti File Upload</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- "https://cdn.jsdelivr.net/npm/@graffiti-garden/wrapper-vue-files@0.0.1/dist/plugin.mjs" -->
         <script type="importmap">
             {
                 "imports": {
@@ -43,10 +42,10 @@
                     <h2>File Uploading</h2>
 
                     <form @submit.prevent="uploadFile($graffitiSession.value)">
-                        <label for="file-input"
-                            >Choose any file to upload (try out different file
-                            types: images, audio, video)</label
-                        >
+                        <label for="file-input">
+                            Choose any file to upload (try out different file
+                            types: images, audio, video)
+                        </label>
                         <input
                             id="file-input"
                             type="file"
@@ -160,6 +159,8 @@
                             this.fileUrl = url;
                         } catch (e) {
                             return alert(e);
+                        } finally {
+                            this.fileToUpload = undefined;
                         }
                         alert("Uploaded!");
                     },

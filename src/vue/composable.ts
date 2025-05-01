@@ -22,6 +22,9 @@ export function useGraffitiObjectToFile(
       file.value = outputs ? outputs.file : outputs;
       fileDataUrl.value = outputs ? outputs.fileDataUrl : outputs;
     },
+    {
+      immediate: true,
+    },
   );
 
   return {
